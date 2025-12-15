@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\Event\OrderMatched;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Asset;
@@ -175,6 +176,6 @@ class OrderService
         $sellOrder->status = 2;
         $sellOrder->save();
 
-        // TODO: Broadcast OrderMatched event here for both users
+        event(new OrderMatched($buyOrder, $sellOrder));
     }
 }
