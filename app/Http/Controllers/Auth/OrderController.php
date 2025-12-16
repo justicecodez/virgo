@@ -40,7 +40,6 @@ class OrderController extends Controller
         ]);
     }
 
-
     public function store(PlaceOrderRequest $request, OrderService $service)
     {
         try {
