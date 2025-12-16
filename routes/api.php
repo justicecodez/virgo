@@ -5,16 +5,17 @@ use App\Http\Controllers\Guest\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-
 Route::group([
-    'prefix' => 'guest'
+    'prefix' => 'guest',
 ], function () {
     Route::post('/login', [AuthController::class, 'login']);
 });
-Route::middleware('auth')->group(function () {
+Route::group([
+    'prefix' => 'guest',
+    'middleware' => 'auth',
+], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 });
-
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/my/orders', [OrderController::class, 'myOrders']);
@@ -23,5 +24,4 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::get('/orders/symbol/{symbol}', [OrderController::class, 'index']);
     Route::post('/orders', [OrderController::class, 'store']);
-
 });

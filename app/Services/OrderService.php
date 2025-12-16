@@ -3,11 +3,11 @@
 namespace App\Services;
 
 use App\Events\Event\OrderMatched;
-use App\Models\User;
-use App\Models\Order;
 use App\Models\Asset;
-use Illuminate\Support\Facades\DB;
+use App\Models\Order;
+use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class OrderService
@@ -36,7 +36,6 @@ class OrderService
             return $order;
         });
     }
-
 
     // public function createOrder(User $user, string $symbol, string $side, float $price, float $amount)
     // {
@@ -218,7 +217,6 @@ class OrderService
         });
     }
 
-
     protected function placeBuy(array $data, User $user): Order
     {
         $user = User::where('id', $user->id)->lockForUpdate()->first();
@@ -249,7 +247,7 @@ class OrderService
             ->lockForUpdate()
             ->first();
 
-        if (!$asset) {
+        if (! $asset) {
             throw new Exception('You do not own this asset');
         }
 
@@ -270,7 +268,6 @@ class OrderService
             'status' => 1,
         ]);
     }
-
 
     protected function attemptMatch(Order $order): void
     {
@@ -294,7 +291,7 @@ class OrderService
                 ->first();
         }
 
-        if (!$counter) {
+        if (! $counter) {
             return;
         }
 

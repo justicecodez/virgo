@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Asset;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
@@ -17,7 +16,7 @@ class UserSeeder extends Seeder
         $userA = User::create([
             'name' => 'Buyer One',
             'email' => 'buyer@test.com',
-            'password' =>'password123',
+            'password' => 'password123',
             'balance' => '100000.00000000', // $100k
         ]);
 

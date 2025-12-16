@@ -15,7 +15,7 @@ class Order extends Model
         'side',
         'price',
         'amount',
-        'status'
+        'status',
     ];
 
     public function user()

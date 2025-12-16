@@ -17,6 +17,7 @@ class AuthController extends Controller
         }
 
         $loginRequest->session()->regenerate();
+
         return response()->json(['status' => true, 'message' => 'Logged in']);
     }
 
@@ -27,6 +28,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return response()->json(['message' => 'Logged out']);
+        return response()->json(['message' => 'Logged out', 'status' => true]);
     }
 }

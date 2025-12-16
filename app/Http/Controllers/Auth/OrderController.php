@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\PlaceOrderRequest;
 use App\Models\Order;
 use App\Services\OrderService;
-use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
@@ -17,9 +17,9 @@ class OrderController extends Controller
 
         $symbol = strtoupper($symbol);
 
-        if (!in_array($symbol, ['BTC', 'ETH'])) {
+        if (! in_array($symbol, ['BTC', 'ETH'])) {
             return response()->json([
-                'message' => 'Invalid symbol'
+                'message' => 'Invalid symbol',
             ], 422);
         }
 
@@ -27,6 +27,7 @@ class OrderController extends Controller
             ->where('status', 1)
             ->orderBy('price')
             ->get();
+
         return response()->json(['status' => true, 'data' => $data]);
     }
 
@@ -36,7 +37,7 @@ class OrderController extends Controller
             'status' => true,
             'data' => Order::where('user_id', $request->user()->id)
                 ->orderByDesc('id')
-                ->get()
+                ->get(),
         ]);
     }
 
@@ -53,7 +54,8 @@ class OrderController extends Controller
                 'order' => $order,
             ]);
         } catch (Exception $e) {
-            Log::error('Error storing Order :' . $e->getMessage());
+            Log::error('Error storing Order :'.$e->getMessage());
+
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage(),
