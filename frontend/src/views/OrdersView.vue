@@ -10,7 +10,7 @@ import echo from "../utils/services/echo";
 import { clearUser } from "../utils/store/auth";
 
 const profile = ref(null)
-const orderBook = ref([])
+const orderBooks = ref([])
 const myOrders = ref([])
 const selectedSymbol = ref('BTC')
 const router = useRouter();
@@ -23,7 +23,7 @@ const fetchProfile = async () => {
 
 const fetchOrderbook = async () => {
   const response = await orderBookService(selectedSymbol.value);
-  orderBook.value = response.data
+  orderBooks.value = response.data
 }
 
 const fetchMyOrders = async () => {
@@ -70,7 +70,7 @@ watch(selectedSymbol, fetchOrderbook);
     <div class="">
       <button @click="logout()" type="button" class="capitalize rounded bg-red-600 text-white p-3 m-1">logout</button>
     </div>
-    <OrderBookComponent :orderBook="orderBook" />
+    <OrderBookComponent :orderBooksBuy="orderBooks.buy" :orderBooksSell="orderBooks.sell" />
     <PlaceOrderComponent />
     <MyOrderComponent :myOrders="myOrders" />
   </main>

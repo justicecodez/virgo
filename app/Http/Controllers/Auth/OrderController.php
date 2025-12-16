@@ -14,21 +14,28 @@ class OrderController extends Controller
 {
     public function index(string $symbol)
     {
-
         $symbol = strtoupper($symbol);
-
         if (! in_array($symbol, ['BTC', 'ETH'])) {
             return response()->json([
                 'message' => 'Invalid symbol',
             ], 422);
         }
-
-        $data = Order::where('symbol', $symbol)
+        $orders = Order::where('symbol', $symbol)
             ->where('status', 1)
             ->orderBy('price')
             ->get();
 
-        return response()->json(['status' => true, 'data' => $data]);
+        // Separate buy and sell orders
+        $buyOrders = $orders->where('side', 'buy')->values();
+        $sellOrders = $orders->where('side', 'sell')->values();
+
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'buy' => $buyOrders,
+                'sell' => $sellOrders
+            ]
+        ]);
     }
 
     public function myOrders(Request $request)
@@ -54,7 +61,7 @@ class OrderController extends Controller
                 'order' => $order,
             ]);
         } catch (Exception $e) {
-            Log::error('Error storing Order :'.$e->getMessage());
+            Log::error('Error storing Order :' . $e->getMessage());
 
             return response()->json([
                 'status' => false,

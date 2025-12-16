@@ -10,7 +10,7 @@
 git clone <repo>
 cd backend
 composer install
-cp .env.example .env
+
 php artisan key:generate
 
 Configure .env:

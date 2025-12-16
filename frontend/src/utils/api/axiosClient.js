@@ -31,13 +31,13 @@ AxiosClient.interceptors.response.use(
   }
 );
 
-// AxiosClient.interceptors.response.use(null, async error => {
-//   if (error.response?.status === 419) {
-//     await ensureCsrf()
-//     return AxiosClient(error.config)
-//   }
-//   return Promise.reject(error)
-// })
+AxiosClient.interceptors.response.use(null, async error => {
+  if (error.response?.status === 419) {
+    await ensureCsrf()
+    return AxiosClient(error.config)
+  }
+  return Promise.reject(error)
+})
 
 
 export default AxiosClient;

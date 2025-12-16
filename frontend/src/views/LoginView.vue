@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { loginService, profileService } from '../utils/services/apiService'
+import { auth } from '../utils/store/auth'
 
 
 const router = useRouter()
@@ -21,7 +22,7 @@ const submit = async () => {
     })
     const user = await profileService();
     if (user.status) {
-      console.log('logged')
+      auth.user=user.user
       router.replace('/')
     }
 

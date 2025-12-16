@@ -18,7 +18,7 @@ class AuthController extends Controller
 
         $loginRequest->session()->regenerate();
 
-        return response()->json(['status' => true, 'message' => 'Logged in']);
+        return response()->json(['status' => true, 'user'=>Auth::user(), 'message' => 'Logged in']);
     }
 
     public function logout(Request $request)

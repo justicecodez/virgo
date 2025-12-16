@@ -1,5 +1,6 @@
 <script setup>
-    import { ref } from "vue";
+import { ref } from "vue";
+import { placeOrderService } from '../utils/services/apiService'
 const symbol = ref("BTC");
 const side = ref("buy");
 const price = ref("");
@@ -9,25 +10,28 @@ const error = ref(null);
 const success = ref(null);
 
 const submit = async () => {
-  error.value = null;
-  success.value = null;
-  loading.value = true;
+    error.value = null;
+    success.value = null;
+    loading.value = true;
 
-  try {
-    await placeOrderService({
-      symbol: symbol.value,
-      side: side.value,
-      price: price.value,
-      amount: amount.value,
-    });
-    success.value = "Order placed successfully";
-    price.value = "";
-    amount.value = "";
-  } catch (e) {
-    error.value = e.response?.data?.message || "Order failed";
-  } finally {
-    loading.value = false;
-  }
+    try {
+        const order = await placeOrderService({
+            symbol: symbol.value,
+            side: side.value,
+            price: price.value,
+            amount: amount.value,
+        });
+        if (order.status) {
+            success.value = "Order placed successfully";
+            price.value = "";
+            amount.value = "";
+        }
+
+    } catch (e) {
+        error.value = e.response?.data?.message || "Order failed";
+    } finally {
+        loading.value = false;
+    }
 };
 </script>
 <template>
