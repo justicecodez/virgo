@@ -14,8 +14,8 @@ use App\Models\Order;
 class OrderMatched implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    public $buyOrder;
-    public $sellOrder;
+    public Order $buyOrder;
+    public Order $sellOrder;
 
     /**
      * Create a new event instance.
@@ -37,5 +37,10 @@ class OrderMatched implements ShouldBroadcast
             new PrivateChannel('user.' . $this->buyOrder->user_id),
             new PrivateChannel('user.' . $this->sellOrder->user_id),
         ];
+    }
+
+    public function broadcastAs(): string
+    {
+        return 'order.matched';
     }
 }

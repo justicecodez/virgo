@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Requests\Guest;
+namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
-class LoginRequest extends FormRequest
+class PlaceOrderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return Auth::check();
     }
 
     /**
@@ -22,8 +23,10 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email'=>'required',
-            'password'=>'required',
+            'symbol' => ['required', 'string', 'in:BTC,ETH'],
+            'side' => ['required', 'in:buy,sell'],
+            'price' => ['required', 'numeric', 'min:0.00000001'],
+            'amount' => ['required', 'numeric', 'min:0.00000001'],
         ];
     }
 }
