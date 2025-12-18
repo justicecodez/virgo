@@ -17,45 +17,47 @@ const router = useRouter();
 
 
 const fetchProfile = async () => {
-  const response = await profileService()
-  profile.value = response.user;
+    const response = await profileService()
+    profile.value = response.user;
 }
 
 const fetchOrderbook = async () => {
-  const response = await orderBookService(selectedSymbol.value);
-  orderBooks.value = response.data
+    const response = await orderBookService(selectedSymbol.value);
+    orderBooks.value = response.data
 }
 
 const fetchMyOrders = async () => {
-  const response = await myOrderService()
-  myOrders.value = response.data
+    const response = await myOrderService()
+    myOrders.value = response.data
 }
 
 async function logout() {
-  try {
-    const response =await logoutService();
-    if (response.status) {
-      clearUser()
-      router.replace("/login");
+    try {
+        const response = await logoutService();
+        if (response.status) {
+            clearUser()
+            router.replace("/login");
+        }
+    } catch (error) {
+        console.error("Logout failed:", error);
     }
-  } catch (error) {
-    console.error("Logout failed:", error);
-  }
 
 }
 
 onMounted(async () => {
-  await fetchProfile();
-  await fetchOrderbook()
-  await fetchMyOrders()
-
-
-  const userId = profile.value.id
-  echo.private(`user.${userId}`).listen('.order.matched', async () => {
-    await fetchProfile()
-    await fetchMyOrders()
+    await fetchProfile();
     await fetchOrderbook()
-  })
+    await fetchMyOrders()
+
+
+    const userId = profile.value.id
+    echo.private(`user.${userId}`).listen('.order.matched', async () => {
+        await Promise.all([
+            fetchProfile(),
+            fetchMyOrders(),
+            fetchOrderbook()
+        ]);
+    })
 })
 
 watch(selectedSymbol, fetchOrderbook);
@@ -65,14 +67,15 @@ watch(selectedSymbol, fetchOrderbook);
 </script>
 
 <template>
-  <HeaderComponent :profile="profile" />
-  <main class="p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <div class="">
-      <button @click="logout()" type="button" class="capitalize rounded bg-red-600 text-white p-3 m-1">logout</button>
-    </div>
-    <OrderBookComponent :orderBooksBuy="orderBooks.buy" :orderBooksSell="orderBooks.sell" />
-    <PlaceOrderComponent />
-    <MyOrderComponent :myOrders="myOrders" />
-  </main>
+    <HeaderComponent :profile="profile" />
+    <main class="p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="">
+            <button @click="logout()" type="button"
+                class="capitalize rounded bg-red-600 text-white p-3 m-1">logout</button>
+        </div>
+        <OrderBookComponent :orderBooksBuy="orderBooks.buy" :orderBooksSell="orderBooks.sell" />
+        <PlaceOrderComponent />
+        <MyOrderComponent :myOrders="myOrders" />
+    </main>
 
 </template>
